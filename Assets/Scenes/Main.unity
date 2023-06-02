@@ -1444,6 +1444,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPlayer: 0
   startingPlayer: 0
+  activePlayers: 
   cells:
   - {fileID: 1534989537}
   - {fileID: 314323289}
@@ -1454,9 +1455,10 @@ MonoBehaviour:
   - {fileID: 85382305}
   - {fileID: 689153295}
   - {fileID: 770001836}
-  playerDisplays:
+  playerUI:
   - {fileID: 5085268252914279049}
   - {fileID: 2034822008}
+  againstAI: 1
 --- !u!1001 &5085268252914279048
 PrefabInstance:
   m_ObjectHideFlags: 0

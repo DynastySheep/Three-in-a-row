@@ -10,7 +10,6 @@ public class Cell : MonoBehaviour
     [Header("Sprite Settings")]
     [SerializeField] private SpriteRenderer spriteReference;
     [SerializeField] private Sprite[] cellSprites;
-
     private GameManager gameManager;
 
     private void Start()
@@ -22,26 +21,30 @@ public class Cell : MonoBehaviour
     {
         if (cellState == CellState.Empty)
         {
-            Debug.Log("Cell Marked");
             MarkCell();
-            gameManager.CheckWinCondition();
         }
     }
 
-    private void MarkCell()
+    public void MarkCell()
     {
-        int startIndex = (int)gameManager.startingPlayer;
-        int currentPlayer = (int)gameManager.currentPlayer;
+        if (!gameManager.roundFinished)
+        {
+            int startIndex = (int)gameManager.startingPlayer;
+            int currentPlayer = (int)gameManager.currentPlayer;
 
-        if (currentPlayer == startIndex)
-        {
-            cellState = CellState.X;
-            spriteReference.sprite = cellSprites[0];
-        }
-        else
-        {
-            cellState = CellState.O;
-            spriteReference.sprite = cellSprites[1];
+            if (currentPlayer == startIndex)
+            {
+                cellState = CellState.X;
+                spriteReference.sprite = cellSprites[0];
+            }
+            else
+            {
+                cellState = CellState.O;
+                spriteReference.sprite = cellSprites[1];
+            }
+
+            gameManager.RemoveEmptyCell(this);
+            gameManager.CheckWinCondition();
         }
     }
 

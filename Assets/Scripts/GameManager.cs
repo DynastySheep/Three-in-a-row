@@ -8,10 +8,17 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public Players currentPlayer;
     public Players startingPlayer;
-    [SerializeField] private Cell[] cells;
+    public List<Players> activePlayers = new List<Players>();
+    public List<Cell> emptyCells = new List<Cell>();
 
+    private int moveCount = 0;
+    public bool roundFinished = false;
+
+    [SerializeField] private Cell[] cells;
     [Header("Player Related")]
-    [SerializeField] private PlayerDisplay[] playerDisplays;
+    [SerializeField] private PlayerDisplay[] playerUI;
+
+    [SerializeField] private bool againstAI = false;
 
     private void Awake()
     {
@@ -23,44 +30,101 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        PopulateEmptyCells();
+
+        if (againstAI)
+        {
+            activePlayers.Add(Players.P1);
+            activePlayers.Add(Players.AI);
+
+            playerUI[1].SetAIText();
+        }
+        else
+        {
+            activePlayers.Add(Players.P1);
+            activePlayers.Add(Players.P2);
+        }
+
         ChooseFirstPlayer();
+    }
+
+    private void Update()
+    {
+        if (currentPlayer == Players.AI)
+        {
+            if (emptyCells.Count > 0)
+            {
+                int randomIndex = Random.Range(0, emptyCells.Count);
+                Cell randomCell = emptyCells[randomIndex];
+                randomCell.MarkCell();
+            }
+        }
+    }
+
+    private void PopulateEmptyCells()
+    {
+        if (emptyCells.Count > 0)
+            emptyCells.Clear();
+
+        emptyCells.AddRange(cells);
+    }
+
+    public void RemoveEmptyCell(Cell cell)
+    {
+        if (emptyCells.Contains(cell))
+        {
+            emptyCells.Remove(cell);
+        }
     }
 
     private void ChooseFirstPlayer()
     {
-        currentPlayer = (Players)Random.Range(0,2);
+        int randomIndex = Random.Range(0, activePlayers.Count);
+        currentPlayer = (Players)activePlayers[randomIndex];
         startingPlayer = currentPlayer;
 
-        if (playerDisplays != null)
+        if (playerUI != null)
         {
             if (startingPlayer == 0)
             {
-                playerDisplays[0].ChangeSymbol(0);
-                playerDisplays[1].ChangeSymbol(1);
+                playerUI[0].ChangeSymbol(0);
+                playerUI[1].ChangeSymbol(1);
             }
             else
             {
-                playerDisplays[0].ChangeSymbol(1);
-                playerDisplays[1].ChangeSymbol(0);
+                playerUI[0].ChangeSymbol(1);
+                playerUI[1].ChangeSymbol(0);
             }
         }
     }
 
     public void SwitchPlayer()
     {
-        if (currentPlayer == Players.P1)
-            currentPlayer = Players.P2;
+        if (againstAI)
+        {
+            if (currentPlayer == Players.P1)
+                currentPlayer = Players.AI;
+            else
+                currentPlayer = Players.P1;
+        }
         else
-            currentPlayer = Players.P1;
+        {
+            if (currentPlayer == Players.P1)
+                currentPlayer = Players.P2;
+            else
+                currentPlayer = Players.P1;
+        }
     }
 
     public void CheckWinCondition()
     {
+        moveCount++;
+
         for (int row = 0; row < 3; row++)
         {
             if (CheckHorizontal(row))
             {
-                ResetBoard();
+                StartCoroutine(ResetBoard());
                 return;
             }
         }
@@ -69,15 +133,22 @@ public class GameManager : MonoBehaviour
         {
             if (CheckVertical(column))
             {
-                ResetBoard();
+                StartCoroutine(ResetBoard());
                 return;
             }
         }
 
         if (CheckDiagonal())
         {
-            ResetBoard();
+            StartCoroutine(ResetBoard());
             return;         
+        }
+
+        if (moveCount == 9 && !roundFinished)
+        {
+            Debug.Log("Nobody won");
+            StartCoroutine(ResetBoard());
+            return;
         }
 
         SwitchPlayer();
@@ -139,14 +210,20 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    private void ResetBoard()
+    private IEnumerator ResetBoard()
     {
+        roundFinished = true;
+        yield return new WaitForSeconds(3f);
         foreach (Cell cell in cells)
         {
             cell.cellState = CellState.Empty;
             cell.ClearCell();
+            PopulateEmptyCells();
             ChooseFirstPlayer();
         }
+
+        moveCount = 0;
+        roundFinished = false;
     }
 }
 
