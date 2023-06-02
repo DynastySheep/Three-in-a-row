@@ -44,6 +44,11 @@ public class Cell : MonoBehaviour
             spriteReference.sprite = cellSprites[1];
         }
     }
+
+    public void ClearCell()
+    {
+        spriteReference.sprite = null;
+    }
 }
 
 public enum CellState
