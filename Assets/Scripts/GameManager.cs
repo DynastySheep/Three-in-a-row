@@ -9,12 +9,11 @@ public class GameManager : MonoBehaviour
     public Players currentPlayer;
     public Players startingPlayer;
     public List<Players> activePlayers = new List<Players>();
-    public List<Cell> emptyCells = new List<Cell>();
+    private BoardManager boardManager;
 
-    private int moveCount = 0;
+    public int moveCount = 0;
     public bool roundFinished = false;
 
-    [SerializeField] private Cell[] cells;
     [Header("Player Related")]
     [SerializeField] private PlayerUI[] playerUI;
 
@@ -30,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        PopulateEmptyCells();
+        boardManager = GetComponent<BoardManager>();
 
         if (againstAI)
         {
@@ -52,32 +51,19 @@ public class GameManager : MonoBehaviour
     {
         if (currentPlayer == Players.AI)
         {
-            if (emptyCells.Count > 0)
+            if (boardManager != null)
             {
-                int randomIndex = Random.Range(0, emptyCells.Count);
-                Cell randomCell = emptyCells[randomIndex];
-                randomCell.MarkCell();
+                Cell randomCell = boardManager.GetRandomEmptyCell();
+                if (randomCell != null)
+                {
+                    randomCell.MarkCell();
+                }
             }
         }
     }
 
-    private void PopulateEmptyCells()
-    {
-        if (emptyCells.Count > 0)
-            emptyCells.Clear();
 
-        emptyCells.AddRange(cells);
-    }
-
-    public void RemoveEmptyCell(Cell cell)
-    {
-        if (emptyCells.Contains(cell))
-        {
-            emptyCells.Remove(cell);
-        }
-    }
-
-    private void ChooseFirstPlayer()
+    public void ChooseFirstPlayer()
     {
         int randomIndex = Random.Range(0, activePlayers.Count);
         currentPlayer = (Players)activePlayers[randomIndex];
@@ -122,108 +108,36 @@ public class GameManager : MonoBehaviour
 
         for (int row = 0; row < 3; row++)
         {
-            if (CheckHorizontal(row))
+            if (boardManager.CheckHorizontal(row))
             {
-                StartCoroutine(ResetBoard());
+                StartCoroutine(boardManager.ResetBoard());
                 return;
             }
         }
 
         for (int column = 0; column < 3; column++)
         {
-            if (CheckVertical(column))
+            if (boardManager.CheckVertical(column))
             {
-                StartCoroutine(ResetBoard());
+                StartCoroutine(boardManager.ResetBoard());
                 return;
             }
         }
 
-        if (CheckDiagonal())
+        if (boardManager.CheckDiagonal())
         {
-            StartCoroutine(ResetBoard());
-            return;         
+            StartCoroutine(boardManager.ResetBoard());
+            return;
         }
 
         if (moveCount == 9 && !roundFinished)
         {
             Debug.Log("Nobody won");
-            StartCoroutine(ResetBoard());
+            StartCoroutine(boardManager.ResetBoard());
             return;
         }
 
         SwitchPlayer();
-    }
-
-    private bool CheckHorizontal(int row)
-    {
-        int startIndex = row * 3;
-        CellState startCell = cells[startIndex].cellState;
-
-        if (startCell == CellState.Empty)
-            return false;
-
-        for (int column = 1; column < 3; column++)
-        {
-            int currentIndex = startIndex + column;
-
-            if (cells[currentIndex].cellState != startCell)
-                return false;
-        }
-
-        Debug.Log("(Horizontal Check)The winner is : " +startCell);
-
-        return true;
-    }
-
-    private bool CheckVertical(int column)
-    {
-        CellState startCell = cells[column].cellState;
-
-        if (startCell == CellState.Empty)
-            return false;
-
-        for (int row = 1; row < 3; row++)
-        {
-            int currentIndex = row * 3 + column;
-
-            if (cells[currentIndex].cellState != startCell)
-                return false;
-        }
-
-        Debug.Log("(Vertical Check)The winner is : " +startCell);
-        return true;
-    }
-
-    private bool CheckDiagonal()
-    {
-        CellState centerCell = cells[4].cellState;
-
-        if (centerCell == CellState.Empty)
-            return false;
-
-        if (cells[0].cellState == centerCell && cells[8].cellState == centerCell || cells[2].cellState == centerCell && cells[6].cellState == centerCell)
-        {
-            Debug.Log("(Diagonal Check)The winner is : " +centerCell);
-            return true;
-        }
-
-        return false;
-    }
-
-    private IEnumerator ResetBoard()
-    {
-        roundFinished = true;
-        yield return new WaitForSeconds(3f);
-        foreach (Cell cell in cells)
-        {
-            cell.cellState = CellState.Empty;
-            cell.ClearCell();
-            PopulateEmptyCells();
-            ChooseFirstPlayer();
-        }
-
-        moveCount = 0;
-        roundFinished = false;
     }
 }
 

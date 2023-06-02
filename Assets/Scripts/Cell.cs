@@ -11,10 +11,12 @@ public class Cell : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteReference;
     [SerializeField] private Sprite[] cellSprites;
     private GameManager gameManager;
+    private BoardManager boardManager;
 
     private void Start()
     {
         gameManager = GameManager.Instance;
+        boardManager = gameManager.GetComponent<BoardManager>();
     }
 
     private void OnMouseDown()
@@ -43,7 +45,7 @@ public class Cell : MonoBehaviour
                 spriteReference.sprite = cellSprites[1];
             }
 
-            gameManager.RemoveEmptyCell(this);
+            boardManager.MarkCellAsUsed(this);
             gameManager.CheckWinCondition();
         }
     }
