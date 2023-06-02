@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class Cell : MonoBehaviour
 {
-    [SerializeField] private CellState cellState;
+    public CellState cellState;
 
     [Header("Sprite Settings")]
     [SerializeField] private SpriteRenderer spriteReference;
@@ -21,18 +20,28 @@ public class Cell : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (cellState != 0)
-            return;
-
-        MarkCell();
-        gameManager.SwitchPlayer();
+        if (cellState == CellState.Empty)
+        {
+            Debug.Log("Cell Marked");
+            MarkCell();
+            gameManager.CheckWinCondition();
+        }
     }
 
     private void MarkCell()
     {
-        cellState = (CellState)gameManager.currentPlayer;
-        int currentStateIndex = (int)cellState;
-        spriteReference.sprite = cellSprites[currentStateIndex];
+        int playerIndex = (int)gameManager.currentPlayer;
+
+        if (playerIndex == 0)
+        {
+            cellState = CellState.X;
+        }
+        else if (playerIndex == 1 || playerIndex == 2)
+        {
+            cellState = CellState.O;
+        }
+
+        spriteReference.sprite = cellSprites[playerIndex];
     }
 }
 

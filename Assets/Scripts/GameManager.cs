@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public Players currentPlayer;
-
+    [SerializeField] private Cell[] cells;
 
     private void Awake()
     {
@@ -23,10 +23,19 @@ public class GameManager : MonoBehaviour
         else
             currentPlayer = Players.P1;
     }
+
+    public void CheckWinCondition()
+    {
+
+
+        Debug.Log("No win condition detected");
+        SwitchPlayer();
+    }
 }
 
 public enum Players
 {
     P1,
-    P2
+    P2,
+    AI
 }
