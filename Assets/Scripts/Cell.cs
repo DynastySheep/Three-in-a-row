@@ -30,18 +30,19 @@ public class Cell : MonoBehaviour
 
     private void MarkCell()
     {
-        int playerIndex = (int)gameManager.currentPlayer;
+        int startIndex = (int)gameManager.startingPlayer;
+        int currentPlayer = (int)gameManager.currentPlayer;
 
-        if (playerIndex == 0)
+        if (currentPlayer == startIndex)
         {
             cellState = CellState.X;
+            spriteReference.sprite = cellSprites[0];
         }
-        else if (playerIndex == 1 || playerIndex == 2)
+        else
         {
             cellState = CellState.O;
+            spriteReference.sprite = cellSprites[1];
         }
-
-        spriteReference.sprite = cellSprites[playerIndex];
     }
 }
 
