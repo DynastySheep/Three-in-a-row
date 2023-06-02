@@ -8,10 +8,16 @@ public class Cell : MonoBehaviour
 {
     [SerializeField] private CellState cellState;
 
-
     [Header("Sprite Settings")]
     [SerializeField] private SpriteRenderer spriteReference;
     [SerializeField] private Sprite[] cellSprites;
+
+    private GameManager gameManager;
+
+    private void Start()
+    {
+        gameManager = GameManager.Instance;
+    }
 
     private void OnMouseDown()
     {
@@ -19,15 +25,14 @@ public class Cell : MonoBehaviour
             return;
 
         MarkCell();
+        gameManager.SwitchPlayer();
     }
 
     private void MarkCell()
     {
-        cellState = CellState.O;
+        cellState = (CellState)gameManager.currentPlayer;
         int currentStateIndex = (int)cellState;
-        spriteReference.sprite = cellSprites[currentStateIndex - 1];
-
-        Debug.Log(this.gameObject.name);
+        spriteReference.sprite = cellSprites[currentStateIndex];
     }
 }
 
