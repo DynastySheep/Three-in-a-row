@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
-public class PlayerUI : MonoBehaviour
+public class PlayerDisplay : MonoBehaviour
 {
     [SerializeField] private Image currentSymbol;
     [SerializeField] private Sprite[] symbols;
