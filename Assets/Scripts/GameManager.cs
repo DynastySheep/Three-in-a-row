@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Cell[] cells;
     [Header("Player Related")]
-    [SerializeField] private PlayerDisplay[] playerUI;
+    [SerializeField] private PlayerUI[] playerUI;
 
     [SerializeField] private bool againstAI = false;
 

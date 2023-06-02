@@ -5,11 +5,11 @@ using UnityEngine.UI;
 using TMPro;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
-public class PlayerDisplay : MonoBehaviour
+public class PlayerUI : MonoBehaviour
 {
     [SerializeField] private Image currentSymbol;
     [SerializeField] private Sprite[] symbols;
-    [SerializeField] private TextMeshProUGUI playerTitle;
+    private TextMeshProUGUI playerTitle;
 
     private void Start()
     {

@@ -1387,17 +1387,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5085268251524048873, guid: e932efa4b2ff830438e55ddb3427b775, type: 3}
   m_PrefabInstance: {fileID: 2034822006}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2034822008 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8391711152432420079, guid: e932efa4b2ff830438e55ddb3427b775, type: 3}
-  m_PrefabInstance: {fileID: 2034822006}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c25ebbac03018346a0fd3e625c2ecc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2037578795
 GameObject:
   m_ObjectHideFlags: 0
@@ -1445,6 +1434,8 @@ MonoBehaviour:
   currentPlayer: 0
   startingPlayer: 0
   activePlayers: 
+  emptyCells: []
+  roundFinished: 0
   cells:
   - {fileID: 1534989537}
   - {fileID: 314323289}
@@ -1456,8 +1447,8 @@ MonoBehaviour:
   - {fileID: 689153295}
   - {fileID: 770001836}
   playerUI:
-  - {fileID: 5085268252914279049}
-  - {fileID: 2034822008}
+  - {fileID: 0}
+  - {fileID: 0}
   againstAI: 1
 --- !u!1001 &5085268252914279048
 PrefabInstance:
@@ -1556,17 +1547,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e932efa4b2ff830438e55ddb3427b775, type: 3}
---- !u!114 &5085268252914279049 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8391711152432420079, guid: e932efa4b2ff830438e55ddb3427b775, type: 3}
-  m_PrefabInstance: {fileID: 5085268252914279048}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c25ebbac03018346a0fd3e625c2ecc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &7189637372146369499
 PrefabInstance:
   m_ObjectHideFlags: 0
